@@ -1,4 +1,4 @@
-package main
+package gamemap
 
 import (
 	"fmt"
@@ -50,5 +50,4 @@ func TestLinear(t *testing.T) {
 			t.Errorf(fmt.Sprintf("%s failed, expected %d, got %d, index %d", test.name, test.expected, m.Settings.Map[res], res))
 		}
 	}
-
 }
