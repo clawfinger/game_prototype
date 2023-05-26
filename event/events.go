@@ -10,5 +10,5 @@ type MousePressedEvent struct {
 }
 
 func (e *MousePressedEvent) Name() string {
-	return "MousePressedEvent"
+	return MousePressedEventID
 }
