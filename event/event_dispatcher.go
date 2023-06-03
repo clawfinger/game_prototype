@@ -21,8 +21,7 @@ func (d *EventDispatcher) Subscribe(eventName string, obs Observer) {
 
 func (d *EventDispatcher) Dispatch(e Event) {
 	sub, ok := d.subscriptions[e.Name()]
-	if !ok {
-		// log
+	if ok {
+		sub.broadcast(e)
 	}
-	sub.broadcast(e)
 }

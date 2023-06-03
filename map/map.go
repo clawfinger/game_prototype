@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"io"
 	"os"
+	"prototype/screen"
 	"prototype/tiles"
 
 	"github.com/hajimehoshi/ebiten/v2"
@@ -17,12 +18,16 @@ type MapSettings struct {
 
 type GameMap struct {
 	Settings *MapSettings
-	op       *ebiten.DrawImageOptions
+	op       *ebiten.GeoM
+	s        *screen.Screen
+	tiles    *tiles.TileManager
 }
 
-func NewMap() *GameMap {
+func NewMap(s *screen.Screen, tiles *tiles.TileManager) *GameMap {
 	return &GameMap{
-		op: &ebiten.DrawImageOptions{},
+		op:   &ebiten.GeoM{},
+		s:    s,
+		tile: tiles,
 	}
 }
 
@@ -44,12 +49,12 @@ func (m *GameMap) Init() error {
 	return nil
 }
 
-func (m *GameMap) Draw(screen *ebiten.Image, tiles *tiles.TileManager) {
+func (m *GameMap) Render() {
 	for row := 0; row < m.Settings.SizeVertical; row++ {
 		for column := 0; column < m.Settings.SizeHorizontal; column++ {
-			m.op.GeoM.Reset()
-			m.op.GeoM.Translate(float64(column*tiles.Settings.TileSize), float64(row*tiles.Settings.TileSize))
-			screen.DrawImage(tiles.GetTile(m.Settings.Map[m.createLinearFromRowAndColumn(row, column)]), m.op)
+			m.op.Reset()
+			m.op.Translate(float64(column*tiles.Settings.TileSize), float64(row*tiles.Settings.TileSize))
+			m.s.AddToLayer(screen.FloorLayer, m.t.GetTile(m.Settings.Map[m.createLinearFromRowAndColumn(row, column)]), mop)
 		}
 	}
 }
