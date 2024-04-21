@@ -5,6 +5,7 @@ import (
 	"image"
 	"io"
 	"os"
+	"path"
 
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
@@ -28,11 +29,12 @@ func NewTileManager() *TileManager {
 }
 
 func (m *TileManager) Init() error {
-	tilemap, _, err := ebitenutil.NewImageFromFile(".\\Assets\\Tilesheet\\colored-transparent.png")
+	tilemap, _, err := ebitenutil.NewImageFromFile(path.Join(".", "Assets", "Tilesheet", "colored-transparent.png"))
+
 	if err != nil {
 		return err
 	}
-	settingsFile, err := os.Open(".\\Assets\\Tilesheet\\tilesheet.json")
+	settingsFile, err := os.Open(path.Join(".", "Assets", "Tilesheet", "tilesheet.json"))
 	if err != nil {
 		return err
 	}

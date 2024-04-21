@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"io"
 	"os"
+	"path"
 	"prototype/screen"
 	"prototype/tiles"
 
@@ -20,7 +21,7 @@ type GameMap struct {
 	Settings *MapSettings
 	op       *ebiten.GeoM
 	s        *screen.Screen
-	tiles    *tiles.TileManager
+	tile     *tiles.TileManager
 }
 
 func NewMap(s *screen.Screen, tiles *tiles.TileManager) *GameMap {
@@ -32,7 +33,8 @@ func NewMap(s *screen.Screen, tiles *tiles.TileManager) *GameMap {
 }
 
 func (m *GameMap) Init() error {
-	settingsFile, err := os.Open(".\\Assets\\map.json")
+	settingsFile, err := os.Open(path.Join(".", "Assets", "map.json"))
+
 	if err != nil {
 		return err
 	}
@@ -53,8 +55,8 @@ func (m *GameMap) Render() {
 	for row := 0; row < m.Settings.SizeVertical; row++ {
 		for column := 0; column < m.Settings.SizeHorizontal; column++ {
 			m.op.Reset()
-			m.op.Translate(float64(column*tiles.Settings.TileSize), float64(row*tiles.Settings.TileSize))
-			m.s.AddToLayer(screen.FloorLayer, m.t.GetTile(m.Settings.Map[m.createLinearFromRowAndColumn(row, column)]), mop)
+			m.op.Translate(float64(column*m.tile.Settings.TileSize), float64(row*m.tile.Settings.TileSize))
+			m.s.AddToLayer(screen.FloorLayer, m.tile.GetTile(m.Settings.Map[m.createLinearFromRowAndColumn(row, column)]), m.op)
 		}
 	}
 }
