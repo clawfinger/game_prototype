@@ -19,7 +19,7 @@ type Game struct {
 }
 
 func NewGame() *Game {
-	s := screen.NewScreen(screen.LayersMax, 320, 240)
+	s := screen.NewScreen(320, 240)
 	tm := tiles.NewTileManager()
 	m := gamemap.NewMap(s, tm)
 	return &Game{
@@ -34,7 +34,6 @@ func (g *Game) Update() error {
 }
 
 func (g *Game) Draw(screen *ebiten.Image) {
-	ebitenutil.DebugPrint(screen, "Hello, World!")
 	screen.Fill(color.RGBA{
 		R: 71,
 		G: 45,
@@ -42,6 +41,7 @@ func (g *Game) Draw(screen *ebiten.Image) {
 	})
 	g.Map.Render()
 	g.Screen.Draw(screen)
+	ebitenutil.DebugPrint(screen, "Hello, World!")
 }
 
 func (g *Game) Layout(outsideWidth, outsideHeight int) (screenWidth, screenHeight int) {

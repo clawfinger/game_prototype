@@ -1,7 +1,10 @@
 package event
 
-const (
-	MousePressedEventID = "MousePressedEvent"
+import "reflect"
+
+var (
+	MousePressedEventName  = reflect.TypeOf(MousePressedEvent{}).Name()
+	EntityCreatedEventName = reflect.TypeOf(EntityCreatedEvent{}).Name()
 )
 
 type MousePressedEvent struct {
@@ -10,5 +13,14 @@ type MousePressedEvent struct {
 }
 
 func (e *MousePressedEvent) Name() string {
-	return MousePressedEventID
+	return MousePressedEventName
+}
+
+type EntityCreatedEvent struct {
+	EntityID  int64
+	Component []string
+}
+
+func (e *EntityCreatedEvent) Name() string {
+	return MousePressedEventName
 }

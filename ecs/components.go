@@ -1,9 +1,14 @@
 package ecs
 
-import "reflect"
+import (
+	"reflect"
+
+	"github.com/hajimehoshi/ebiten/v2"
+)
 
 var (
 	PositionComponentName = reflect.TypeOf(PositionComponent{}).Name()
+	SpriteComponentName   = reflect.TypeOf(SpriteComponent{}).Name()
 )
 
 type ComponentBase interface {
@@ -11,10 +16,19 @@ type ComponentBase interface {
 }
 
 type PositionComponent struct {
-	X int
-	Y int
+	X         int
+	Y         int
+	transform ebiten.GeoM
 }
 
 func (c *PositionComponent) Name() string {
 	return PositionComponentName
+}
+
+type SpriteComponent struct {
+	Sprite *ebiten.Image
+}
+
+func (c *SpriteComponent) Name() string {
+	return SpriteComponentName
 }

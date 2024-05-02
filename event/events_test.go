@@ -32,7 +32,7 @@ func TestEvent(t *testing.T) {
 	}
 	ed := NewEventDispatcher()
 	to := &TestObserver{}
-	ed.Subscribe(MousePressedEventID, to)
+	ed.Subscribe(MousePressedEventName, to)
 	for _, test := range tests {
 		ed.Dispatch(test.event)
 		if to.X != test.expectedX || to.Y != test.expectedY {
