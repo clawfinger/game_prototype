@@ -1,4 +1,4 @@
-package ecs
+package components
 
 import (
 	"reflect"
@@ -18,7 +18,7 @@ type ComponentBase interface {
 type PositionComponent struct {
 	X         int
 	Y         int
-	transform ebiten.GeoM
+	Transform ebiten.GeoM
 }
 
 func (c *PositionComponent) Name() string {

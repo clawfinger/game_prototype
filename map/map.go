@@ -56,6 +56,7 @@ func (m *GameMap) Render() {
 		for column := 0; column < m.Settings.SizeHorizontal; column++ {
 			m.op.Reset()
 			m.op.Translate(float64(column*m.tile.Settings.TileSize), float64(row*m.tile.Settings.TileSize))
+			m.op.Translate(80, 40)
 			m.s.AddToLayer(screen.FloorLayer, m.tile.GetTile(m.Settings.Map[m.createLinearFromRowAndColumn(row, column)]), m.op)
 		}
 	}

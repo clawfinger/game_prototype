@@ -1,6 +1,7 @@
-package ecs
+package systems
 
 import (
+	"prototype/ecs/components"
 	"prototype/event"
 	"prototype/screen"
 )
@@ -74,23 +75,23 @@ func NewMovementSystem() *MovementSystem {
 type RenderSystem struct {
 	System
 	ed  *event.EventDispatcher
-	ec  *EntityContainer
+	ec  *components.EntityContainer
 	scr *screen.Screen
 }
 
 func (s *RenderSystem) Update() {
 	for _, entityID := range s.entities {
-		spriteComponent, err := GetComponent[*SpriteComponent](s.ec, entityID, SpriteComponentName)
+		spriteComponent, err := components.GetComponent[*components.SpriteComponent](s.ec, entityID, components.SpriteComponentName)
 		if err != nil {
 			// TODO: log
 			continue
 		}
-		positionComponent, err := GetComponent[*PositionComponent](s.ec, entityID, PositionComponentName)
+		positionComponent, err := components.GetComponent[*components.PositionComponent](s.ec, entityID, components.PositionComponentName)
 		if err != nil {
 			// TODO: log
 			continue
 		}
-		s.scr.AddToLayer(screen.ActorsLayer, spriteComponent.Sprite, &positionComponent.transform)
+		s.scr.AddToLayer(screen.ActorsLayer, spriteComponent.Sprite, &positionComponent.Transform)
 	}
 }
 
@@ -111,11 +112,11 @@ func (s *RenderSystem) handleEntityCreatedEvent(e *event.EntityCreatedEvent) {
 	}
 }
 
-func NewRenderSystem(ed *event.EventDispatcher, ec *EntityContainer, s *screen.Screen) *RenderSystem {
+func NewRenderSystem(ed *event.EventDispatcher, ec *components.EntityContainer, s *screen.Screen) *RenderSystem {
 	return &RenderSystem{
 		System: System{
 			entities:     []int64{},
-			requirements: []string{PositionComponentName, SpriteComponentName},
+			requirements: []string{components.PositionComponentName, components.SpriteComponentName},
 		},
 		ed:  ed,
 		ec:  ec,

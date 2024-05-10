@@ -1,6 +1,10 @@
 package screen
 
-import "github.com/hajimehoshi/ebiten/v2"
+import (
+	"prototype/settings"
+
+	"github.com/hajimehoshi/ebiten/v2"
+)
 
 type Screen struct {
 	Width          int
@@ -17,14 +21,14 @@ type spriteData struct {
 	pos    ebiten.GeoM
 }
 
-func NewScreen(width int, height int) *Screen {
+func NewScreen() *Screen {
 	return &Screen{
-		Width:          width,
-		Height:         height,
+		Width:          settings.Settings.ScreenSizeX,
+		Height:         settings.Settings.ScreenSizeY,
 		Layers:         make([][]*spriteData, LayersMax),
 		Op:             &ebiten.DrawImageOptions{},
 		SpriteOp:       &ebiten.DrawImageOptions{},
-		InternalScreen: ebiten.NewImage(width, height),
+		InternalScreen: ebiten.NewImage(settings.Settings.ScreenSizeX, settings.Settings.ScreenSizeY),
 	}
 }
 

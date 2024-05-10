@@ -4,6 +4,7 @@ import (
 	"image/color"
 	gamemap "prototype/map"
 	"prototype/screen"
+	"prototype/settings"
 	"prototype/tiles"
 
 	_ "image/png"
@@ -19,7 +20,8 @@ type Game struct {
 }
 
 func NewGame() *Game {
-	s := screen.NewScreen(320, 240)
+	settings.Init()
+	s := screen.NewScreen()
 	tm := tiles.NewTileManager()
 	m := gamemap.NewMap(s, tm)
 	return &Game{
