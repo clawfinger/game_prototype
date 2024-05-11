@@ -26,6 +26,7 @@ func (c *PositionComponent) Name() string {
 }
 
 type SpriteComponent struct {
+	Layer  int
 	Sprite *ebiten.Image
 }
 

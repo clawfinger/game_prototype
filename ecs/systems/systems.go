@@ -1,23 +1,17 @@
 package systems
 
-import (
-	"prototype/ecs/components"
-	"prototype/event"
-	"prototype/screen"
-)
-
 type SystemBase interface {
 	Update()
 	Init()
 }
 
 type System struct {
-	entities     []int64
-	requirements []string
+	Entities     []int64
+	Requirements []string
 }
 
-func (s *System) fitsRequirements(entityComponents []string) bool {
-	for _, requirement := range s.requirements {
+func (s *System) FitsRequirements(entityComponents []string) bool {
+	for _, requirement := range s.Requirements {
 		contains := false
 		for _, component := range entityComponents {
 			if requirement == component {
@@ -32,8 +26,8 @@ func (s *System) fitsRequirements(entityComponents []string) bool {
 	return true
 }
 
-func (s *System) hasEntity(entityID int64) bool {
-	for _, entity := range s.entities {
+func (s *System) HasEntity(entityID int64) bool {
+	for _, entity := range s.Entities {
 		if entity == entityID {
 			return true
 		}
@@ -41,17 +35,17 @@ func (s *System) hasEntity(entityID int64) bool {
 	return false
 }
 
-func (s *System) addEntity(entityID int64) {
-	if !s.hasEntity(entityID) {
-		s.entities = append(s.entities, entityID)
+func (s *System) AddEntity(entityID int64) {
+	if !s.HasEntity(entityID) {
+		s.Entities = append(s.Entities, entityID)
 	}
 }
 
-func (s *System) removeEntity(entityID int64) {
-	for i, entity := range s.entities {
+func (s *System) RemoveEntity(entityID int64) {
+	for i, entity := range s.Entities {
 		if entity == entityID {
-			s.entities[i], s.entities[len(s.entities)-1] = s.entities[len(s.entities)-1], s.entities[i]
-			s.entities = s.entities[:len(s.entities)-1]
+			s.Entities[i], s.Entities[len(s.Entities)-1] = s.Entities[len(s.Entities)-1], s.Entities[i]
+			s.Entities = s.Entities[:len(s.Entities)-1]
 		}
 	}
 }
@@ -70,56 +64,4 @@ func (s *MovementSystem) Init() {
 
 func NewMovementSystem() *MovementSystem {
 	return &MovementSystem{}
-}
-
-type RenderSystem struct {
-	System
-	ed  *event.EventDispatcher
-	ec  *components.EntityContainer
-	scr *screen.Screen
-}
-
-func (s *RenderSystem) Update() {
-	for _, entityID := range s.entities {
-		spriteComponent, err := components.GetComponent[*components.SpriteComponent](s.ec, entityID, components.SpriteComponentName)
-		if err != nil {
-			// TODO: log
-			continue
-		}
-		positionComponent, err := components.GetComponent[*components.PositionComponent](s.ec, entityID, components.PositionComponentName)
-		if err != nil {
-			// TODO: log
-			continue
-		}
-		s.scr.AddToLayer(screen.ActorsLayer, spriteComponent.Sprite, &positionComponent.Transform)
-	}
-}
-
-func (s *RenderSystem) Init() {
-	s.ed.Subscribe(event.EntityCreatedEventName, s)
-}
-
-func (s *RenderSystem) Notify(e event.Event) {
-	switch event := e.(type) {
-	case *event.EntityCreatedEvent:
-		s.handleEntityCreatedEvent(event)
-	}
-}
-
-func (s *RenderSystem) handleEntityCreatedEvent(e *event.EntityCreatedEvent) {
-	if !s.hasEntity(e.EntityID) {
-		s.System.entities = append(s.System.entities, e.EntityID)
-	}
-}
-
-func NewRenderSystem(ed *event.EventDispatcher, ec *components.EntityContainer, s *screen.Screen) *RenderSystem {
-	return &RenderSystem{
-		System: System{
-			entities:     []int64{},
-			requirements: []string{components.PositionComponentName, components.SpriteComponentName},
-		},
-		ed:  ed,
-		ec:  ec,
-		scr: s,
-	}
 }

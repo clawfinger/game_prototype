@@ -17,8 +17,8 @@ func (e *MousePressedEvent) Name() string {
 }
 
 type EntityCreatedEvent struct {
-	EntityID  int64
-	Component []string
+	EntityID   int64
+	Components []string
 }
 
 func (e *EntityCreatedEvent) Name() string {

@@ -13,7 +13,6 @@ type SystemManager struct {
 func NewSystemManager(ed *event.EventDispatcher, ec *components.EntityContainer, s *screen.Screen) *SystemManager {
 	sm := &SystemManager{}
 	sm.systems = append(sm.systems, NewMovementSystem())
-	sm.systems = append(sm.systems, NewRenderSystem(ed, ec, s))
 	return sm
 }
 
