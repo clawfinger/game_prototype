@@ -10,8 +10,8 @@ type TestObserver struct {
 func (o *TestObserver) Notify(e Event) {
 	switch event := e.(type) {
 	case *MousePressedEvent:
-		o.X = event.x
-		o.Y = event.y
+		o.X = event.X
+		o.Y = event.Y
 	}
 }
 
@@ -23,8 +23,8 @@ func TestEvent(t *testing.T) {
 	}{
 		{
 			event: &MousePressedEvent{
-				x: 10,
-				y: 20,
+				X: 10,
+				Y: 20,
 			},
 			expectedX: 10,
 			expectedY: 20,

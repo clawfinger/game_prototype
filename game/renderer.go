@@ -17,16 +17,8 @@ type RenderSystem struct {
 
 func (s *RenderSystem) Render() {
 	for _, entityID := range s.Entities {
-		spriteComponent, err := components.GetComponent[*components.SpriteComponent](s.ec, entityID, components.SpriteComponentName)
-		if err != nil {
-			// TODO: log
-			continue
-		}
-		positionComponent, err := components.GetComponent[*components.PositionComponent](s.ec, entityID, components.PositionComponentName)
-		if err != nil {
-			// TODO: log
-			continue
-		}
+		spriteComponent := components.GetComponent[*components.SpriteComponent](s.ec, entityID, components.SpriteComponentName)
+		positionComponent := components.GetComponent[*components.PositionComponent](s.ec, entityID, components.PositionComponentName)
 		s.scr.AddToLayer(spriteComponent.Layer, spriteComponent.Sprite, &positionComponent.Transform)
 	}
 }

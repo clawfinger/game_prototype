@@ -1,37 +1,44 @@
 package components
 
-import "fmt"
-
-type StringList []string
+import (
+	"fmt"
+	"prototype/event"
+)
 
 type EntityContainer struct {
 	currentEntityID    int64
 	components         map[int64]map[string]ComponentBase
 	componentFactories map[string]func() ComponentBase
+	ed                 *event.EventDispatcher
 }
 
-func NewEntityContainer() *EntityContainer {
+func NewEntityContainer(ed *event.EventDispatcher) *EntityContainer {
 	ec := &EntityContainer{
 		components:         map[int64]map[string]ComponentBase{},
 		componentFactories: map[string]func() ComponentBase{},
+		ed:                 ed,
 	}
 	ec.createComponentFactories()
 	return ec
 }
 
-func (c *EntityContainer) CreateEntity(components StringList) (int64, error) {
+func (c *EntityContainer) CreateEntity(components []string) int64 {
 	entityData := make(map[string]ComponentBase)
 	for _, component := range components {
 		factory, ok := c.componentFactories[component]
 		if !ok {
-			return 0, fmt.Errorf("no factory for component %s", component)
+			// TODO: log
 		}
 		entityData[component] = factory()
 	}
 	entityID := c.currentEntityID
 	c.components[entityID] = entityData
 	c.currentEntityID++
-	return entityID, nil
+	c.ed.Dispatch(&event.EntityCreatedEvent{
+		EntityID:   entityID,
+		Components: components,
+	})
+	return entityID
 }
 
 func (c *EntityContainer) RemoveEntity(entityID int64) {
@@ -56,15 +63,14 @@ func (c *EntityContainer) createComponentFactories() {
 	}
 }
 
-func GetComponent[T any](c *EntityContainer, entityID int64, name string) (T, error) {
+func GetComponent[T any](c *EntityContainer, entityID int64, name string) T {
 	components, ok := c.components[entityID]
-	var t T
 	if !ok {
-		return t, fmt.Errorf("no entity %d", entityID)
+		// TODO log
 	}
 	component, ok := components[name]
 	if !ok {
-		return t, fmt.Errorf("no component %s for entity %d", name, entityID)
+		// TODO log
 	}
-	return component.(T), nil
+	return component.(T)
 }

@@ -17,9 +17,10 @@ type GameContextData struct {
 }
 
 func NewGameContext() *GameContextData {
+	ed := event.NewEventDispatcher()
 	return &GameContextData{
-		EventDispatcher: event.NewEventDispatcher(),
-		EntityContainer: components.NewEntityContainer(),
+		EventDispatcher: ed,
+		EntityContainer: components.NewEntityContainer(ed),
 		Screen:          screen.NewScreen(),
 		TileManager:     tiles.NewTileManager(),
 	}

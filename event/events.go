@@ -3,17 +3,38 @@ package event
 import "reflect"
 
 var (
-	MousePressedEventName  = reflect.TypeOf(MousePressedEvent{}).Name()
+	MousePressedEventName = reflect.TypeOf(MousePressedEvent{}).Name()
+	MouseRelesedEventName = reflect.TypeOf(MouseRelesedEvent{}).Name()
+	MouseMovedEventName   = reflect.TypeOf(MouseMovedEvent{}).Name()
+
 	EntityCreatedEventName = reflect.TypeOf(EntityCreatedEvent{}).Name()
 )
 
 type MousePressedEvent struct {
-	x int
-	y int
+	X int
+	Y int
 }
 
 func (e *MousePressedEvent) Name() string {
 	return MousePressedEventName
+}
+
+type MouseRelesedEvent struct {
+	X int
+	Y int
+}
+
+func (e *MouseRelesedEvent) Name() string {
+	return MouseRelesedEventName
+}
+
+type MouseMovedEvent struct {
+	X int
+	Y int
+}
+
+func (e *MouseMovedEvent) Name() string {
+	return MouseMovedEventName
 }
 
 type EntityCreatedEvent struct {
@@ -22,5 +43,5 @@ type EntityCreatedEvent struct {
 }
 
 func (e *EntityCreatedEvent) Name() string {
-	return MousePressedEventName
+	return EntityCreatedEventName
 }
