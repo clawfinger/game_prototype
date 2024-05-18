@@ -1,7 +1,6 @@
 package systems
 
 import (
-	"fmt"
 	"prototype/event"
 	gamecontext "prototype/game_context"
 )
@@ -98,13 +97,13 @@ func (s *MovementSystem) handleEntityCreatedEvent(e *event.EntityCreatedEvent) {
 }
 
 func (s *MovementSystem) handleMouseRelesedEvent(e *event.MouseRelesedEvent) {
-	fmt.Printf("mouse released at %d:%d\n", e.X, e.Y)
+	// fmt.Printf("mouse released at %d:%d\n", e.X, e.Y)
 }
 
 func (s *MovementSystem) handleMousePressedEvent(e *event.MousePressedEvent) {
-	fmt.Printf("mouse pressed at %d:%d\n", e.X, e.Y)
+	// fmt.Printf("mouse pressed at %d:%d\n", e.X, e.Y)
 }
 
 func (s *MovementSystem) handleMouseMovedEvent(e *event.MouseMovedEvent) {
-	fmt.Printf("mouse moved to %d:%d\n", e.X, e.Y)
+	// fmt.Printf("mouse moved to %d:%d\n", e.X, e.Y)
 }

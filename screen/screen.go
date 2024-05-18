@@ -23,12 +23,12 @@ type spriteData struct {
 
 func NewScreen() *Screen {
 	return &Screen{
-		Width:          settings.Settings.ScreenSizeX,
-		Height:         settings.Settings.ScreenSizeY,
+		Width:          settings.Data.Screen.ScreenSizeX,
+		Height:         settings.Data.Screen.ScreenSizeY,
 		Layers:         make([][]*spriteData, LayersMax),
 		Op:             &ebiten.DrawImageOptions{},
 		SpriteOp:       &ebiten.DrawImageOptions{},
-		InternalScreen: ebiten.NewImage(settings.Settings.ScreenSizeX, settings.Settings.ScreenSizeY),
+		InternalScreen: ebiten.NewImage(settings.Data.Screen.ScreenSizeX, settings.Data.Screen.ScreenSizeY),
 	}
 }
 

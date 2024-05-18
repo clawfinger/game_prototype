@@ -15,15 +15,18 @@ type Game struct {
 	GameInstance *game.GameInstance
 }
 
-func NewGame() *Game {
-	settings.Init()
+func NewGame() (*Game, error) {
+	err := settings.Init()
+	if err != nil {
+		return nil, err
+	}
 	gamecontext.Init()
 
 	gi := game.NewGameInstance()
 	gi.Init()
 	return &Game{
 		GameInstance: gi,
-	}
+	}, nil
 }
 
 func (g *Game) Update() error {

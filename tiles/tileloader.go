@@ -1,27 +1,16 @@
 package tiles
 
 import (
-	"encoding/json"
 	"image"
-	"io"
-	"os"
 	"path"
+	"prototype/settings"
 
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
 )
 
-// 468 - character, 275 - enemy // 625 - target mark
-type TileSheetSettings struct {
-	TileSize        int `json:"tile_size"`
-	TileOffset      int `json:"tile_offset"`
-	TotalHorizontal int `json:"total_horizontal"`
-	TotalVertical   int `json:"total_vertical"`
-}
-
 type TileManager struct {
 	TileSheet *ebiten.Image
-	Settings  *TileSheetSettings
 }
 
 func NewTileManager() *TileManager {
@@ -34,21 +23,7 @@ func (m *TileManager) Init() error {
 	if err != nil {
 		return err
 	}
-	settingsFile, err := os.Open(path.Join(".", "Assets", "Tilesheet", "tilesheet.json"))
-	if err != nil {
-		return err
-	}
-	byteValue, err := io.ReadAll(settingsFile)
-	if err != nil {
-		return err
-	}
-	settings := &TileSheetSettings{}
-	err = json.Unmarshal(byteValue, settings)
-	if err != nil {
-		return err
-	}
 	m.TileSheet = tilemap
-	m.Settings = settings
 	return nil
 }
 
@@ -56,9 +31,9 @@ func (m *TileManager) GetTile(number int) *ebiten.Image {
 	if number != 0 {
 		number -= 1
 	}
-	row := number / m.Settings.TotalHorizontal
-	column := number % m.Settings.TotalHorizontal
-	x := column*m.Settings.TileSize + (column-1)*m.Settings.TileOffset
-	y := row*m.Settings.TileSize + (row-1)*m.Settings.TileOffset
-	return m.TileSheet.SubImage(image.Rect(x, y, m.Settings.TileSize+x, m.Settings.TileSize+y)).(*ebiten.Image)
+	row := number / settings.Data.Tilesheet.TotalHorizontal
+	column := number % settings.Data.Tilesheet.TotalHorizontal
+	x := column*settings.Data.Tilesheet.TileSize + (column-1)*settings.Data.Tilesheet.TileOffset
+	y := row*settings.Data.Tilesheet.TileSize + (row-1)*settings.Data.Tilesheet.TileOffset
+	return m.TileSheet.SubImage(image.Rect(x, y, settings.Data.Tilesheet.TileSize+x, settings.Data.Tilesheet.TileSize+y)).(*ebiten.Image)
 }

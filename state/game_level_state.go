@@ -10,14 +10,17 @@ import (
 
 type GameLevelState struct {
 	Map               *gamemap.GameMap
+	MapRenderer       *gamemap.MapRenderer
 	EntityContainer   *components.EntityContainer
 	systemsManager    *systems.SystemManager
 	characterEntityID int64
 }
 
 func NewGameLevelState() *GameLevelState {
+	gameMap := gamemap.NewMap()
 	return &GameLevelState{
-		Map:             gamemap.NewMap(),
+		Map:             gameMap,
+		MapRenderer:     gamemap.NewMapRenderer(gameMap),
 		EntityContainer: gamecontext.GameContext.EntityContainer,
 		systemsManager:  systems.NewSystemManager(gamecontext.GameContext.EventDispatcher, gamecontext.GameContext.EntityContainer, gamecontext.GameContext.Screen),
 	}
@@ -25,6 +28,7 @@ func NewGameLevelState() *GameLevelState {
 
 func (s *GameLevelState) Init() {
 	s.Map.Init()
+	s.MapRenderer.Init()
 	s.systemsManager.Init()
 	s.characterEntityID = s.EntityContainer.CreateEntity([]string{components.PositionComponentName, components.SpriteComponentName})
 	sprite := components.GetComponent[*components.SpriteComponent](s.EntityContainer, s.characterEntityID, components.SpriteComponentName)
@@ -40,7 +44,7 @@ func (s *GameLevelState) Update() {
 }
 
 func (s *GameLevelState) Render() {
-	s.Map.Render()
+	s.MapRenderer.Render()
 }
 
 func (s *GameLevelState) Deinit() {}

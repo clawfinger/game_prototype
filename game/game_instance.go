@@ -22,7 +22,6 @@ func NewGameInstance() *GameInstance {
 
 func (i *GameInstance) Init() {
 	i.renderSystem.Init()
-
 	i.states.PushState(state.NewGameLevelState()) // TODO: change to some kind of menu state
 }
 

@@ -16,7 +16,10 @@ import (
 
 func main() {
 	ebiten.SetWindowTitle("Prototype")
-	game := NewGame()
+	game, err := NewGame()
+	if err != nil {
+		log.Fatal(err)
+	}
 	if err := ebiten.RunGame(game); err != nil {
 		log.Fatal(err)
 	}
