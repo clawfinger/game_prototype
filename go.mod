@@ -3,6 +3,7 @@ module prototype
 go 1.19
 
 require (
+	github.com/hajimehoshi/ebiten v1.12.12
 	github.com/hajimehoshi/ebiten/v2 v2.7.3
 	github.com/stretchr/testify v1.9.0
 )

@@ -1,7 +1,6 @@
 package game
 
 import (
-	gamecontext "prototype/game_context"
 	"prototype/input"
 	"prototype/state"
 )
@@ -16,7 +15,7 @@ func NewGameInstance() *GameInstance {
 	return &GameInstance{
 		states:          state.NewStateManager(),
 		renderSystem:    NewRenderSystem(),
-		InputController: input.NewInputController(gamecontext.GameContext.EventDispatcher),
+		InputController: input.NewInputController(),
 	}
 }
 

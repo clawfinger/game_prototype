@@ -59,6 +59,62 @@ func TestLinear(t *testing.T) {
 	}
 }
 
+func TestFromLinear(t *testing.T) {
+	m := GameMap{
+		Settings: &MapSettings{},
+	}
+	m.Settings.SizeHorizontal = 5
+	m.Settings.SizeVertical = 7
+	idxMap := []int{
+		7, 1, 1, 1, 1,
+		1, 5, 2, 2, 1,
+		1, 2, 2, 2, 1,
+		1, 2, 2, 2, 1,
+		1, 2, 2, 2, 1,
+		1, 2, 2, 2, 1,
+		1, 1, 1, 1, 9,
+	}
+	var tiles []*Tile
+	for i := range idxMap {
+		tiles = append(tiles, &Tile{SpriteIdx: idxMap[i]})
+	}
+	m.Settings.Map = tiles
+	tests := []struct {
+		name           string
+		expectedRow    int
+		expectedColumn int
+		liner          int
+	}{
+		{
+			name:           "simple",
+			liner:          6,
+			expectedRow:    1,
+			expectedColumn: 1,
+		},
+		{
+			name:           "0",
+			liner:          0,
+			expectedRow:    0,
+			expectedColumn: 0,
+		},
+		{
+			name:           "",
+			liner:          4,
+			expectedRow:    0,
+			expectedColumn: 4,
+		},
+	}
+	for _, test := range tests {
+		x, y := m.createRowAndColumnFromLiear(test.liner)
+		if x != test.expectedColumn {
+			t.Errorf(fmt.Sprintf("%s failed, expected column %d, got %d, linear %d", test.name, test.expectedColumn, x, test.liner))
+		}
+		if y != test.expectedRow {
+			t.Errorf(fmt.Sprintf("%s failed, expected row %d, got %d, linear %d", test.name, test.expectedRow, y, test.liner))
+		}
+	}
+}
+
 func TestGetTiles(t *testing.T) {
 	settings.Init()
 	gamecontext.Init()

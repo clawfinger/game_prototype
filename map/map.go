@@ -11,6 +11,8 @@ import (
 
 type Tile struct {
 	SpriteIdx int
+	X         int
+	Y         int
 }
 
 type MapSettings struct {
@@ -47,16 +49,23 @@ func (m *GameMap) Init() error {
 		844, 3, 3, 1, 1, 1, 1, 1, 1, 638,
 		844, 638, 844, 542, 844, 844, 638, 542, 844, 844,
 	}
-	var tiles []*Tile
-	for i := range idxMap {
-		tiles = append(tiles, &Tile{SpriteIdx: idxMap[i]})
-	}
 	settings := &MapSettings{
 		SizeHorizontal: 10,
 		SizeVertical:   10,
-		Map:            tiles,
 	}
 	m.Settings = settings
+	var tiles []*Tile
+	for i := range idxMap {
+		x, y := m.createRowAndColumnFromLiear(i)
+		tile := &Tile{
+			SpriteIdx: idxMap[i],
+			X:         x,
+			Y:         y,
+		}
+		tiles = append(tiles, tile)
+	}
+	settings.Map = tiles
+
 	return nil
 }
 
@@ -66,6 +75,12 @@ func (m *GameMap) GetLevelSizeInPixels() (int, int) {
 
 func (m *GameMap) createLinearFromRowAndColumn(row int, column int) int {
 	return row*m.Settings.SizeHorizontal + column
+}
+
+func (m *GameMap) createRowAndColumnFromLiear(idx int) (int, int) {
+	x := idx % m.Settings.SizeHorizontal
+	y := idx / m.Settings.SizeHorizontal
+	return x, y
 }
 
 func (m *GameMap) GetTile(x, y int) (*Tile, bool) {

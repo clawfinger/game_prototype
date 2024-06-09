@@ -7,7 +7,8 @@ var (
 	MouseRelesedEventName = reflect.TypeOf(MouseRelesedEvent{}).Name()
 	MouseMovedEventName   = reflect.TypeOf(MouseMovedEvent{}).Name()
 
-	EntityCreatedEventName = reflect.TypeOf(EntityCreatedEvent{}).Name()
+	EntityCreatedEventName  = reflect.TypeOf(EntityCreatedEvent{}).Name()
+	MapArenaLoadedEventName = reflect.TypeOf(MapArenaLoadedEvent{}).Name()
 )
 
 type MousePressedEvent struct {
@@ -44,4 +45,11 @@ type EntityCreatedEvent struct {
 
 func (e *EntityCreatedEvent) Name() string {
 	return EntityCreatedEventName
+}
+
+type MapArenaLoadedEvent struct {
+}
+
+func (e *MapArenaLoadedEvent) Name() string {
+	return MapArenaLoadedEventName
 }
