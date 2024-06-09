@@ -41,6 +41,8 @@ func (r *MapRenderer) Init() {
 	levelImage := ebiten.NewImage(sizeX, sizeY)
 	r.image = levelImage
 	// r.ed.Subscribe(event.MouseMovedEventName, r)
+	r.ed.Subscribe(event.RenderEventName, r)
+
 }
 
 func (r *MapRenderer) Render() {
@@ -71,6 +73,8 @@ func (r *MapRenderer) Notify(e event.Event) {
 	switch event := e.(type) {
 	case *event.MouseMovedEvent:
 		r.handleMouseMovedEvent(event)
+	case *event.RenderEvent:
+		r.Render()
 	}
 }
 

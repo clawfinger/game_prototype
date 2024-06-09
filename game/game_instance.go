@@ -7,20 +7,17 @@ import (
 
 type GameInstance struct {
 	states          *state.StateManager
-	renderSystem    *RenderSystem
 	InputController *input.InputController
 }
 
 func NewGameInstance() *GameInstance {
 	return &GameInstance{
 		states:          state.NewStateManager(),
-		renderSystem:    NewRenderSystem(),
 		InputController: input.NewInputController(),
 	}
 }
 
 func (i *GameInstance) Init() {
-	i.renderSystem.Init()
 	i.states.PushState(state.NewGameLevelState()) // TODO: change to some kind of menu state
 }
 
@@ -31,5 +28,4 @@ func (i *GameInstance) Update() {
 
 func (i *GameInstance) Render() {
 	i.states.GetCurrentState().Render()
-	i.renderSystem.Render()
 }

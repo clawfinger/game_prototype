@@ -1,18 +1,20 @@
-package game
+package systems
 
 import (
 	"prototype/ecs/components"
-	"prototype/ecs/systems"
 	"prototype/event"
 	gamecontext "prototype/game_context"
 	"prototype/screen"
 )
 
 type RenderSystem struct {
-	systems.System
+	System
 	ed  *event.EventDispatcher
 	ec  *components.EntityContainer
 	scr *screen.Screen
+}
+
+func (s *RenderSystem) Update() {
 }
 
 func (s *RenderSystem) Render() {
@@ -25,12 +27,15 @@ func (s *RenderSystem) Render() {
 
 func (s *RenderSystem) Init() {
 	s.ed.Subscribe(event.EntityCreatedEventName, s)
+	s.ed.Subscribe(event.RenderEventName, s)
 }
 
 func (s *RenderSystem) Notify(e event.Event) {
 	switch event := e.(type) {
 	case *event.EntityCreatedEvent:
 		s.handleEntityCreatedEvent(event)
+	case *event.RenderEvent:
+		s.Render()
 	}
 }
 
@@ -42,7 +47,7 @@ func (s *RenderSystem) handleEntityCreatedEvent(e *event.EntityCreatedEvent) {
 
 func NewRenderSystem() *RenderSystem {
 	return &RenderSystem{
-		System: systems.System{
+		System: System{
 			Entities:     []int64{},
 			Requirements: []string{components.PositionComponentName, components.SpriteComponentName},
 		},

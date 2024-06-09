@@ -9,6 +9,7 @@ var (
 
 	EntityCreatedEventName  = reflect.TypeOf(EntityCreatedEvent{}).Name()
 	MapArenaLoadedEventName = reflect.TypeOf(MapArenaLoadedEvent{}).Name()
+	RenderEventName         = reflect.TypeOf(RenderEvent{}).Name()
 )
 
 type MousePressedEvent struct {
@@ -52,4 +53,11 @@ type MapArenaLoadedEvent struct {
 
 func (e *MapArenaLoadedEvent) Name() string {
 	return MapArenaLoadedEventName
+}
+
+type RenderEvent struct {
+}
+
+func (e *RenderEvent) Name() string {
+	return RenderEventName
 }

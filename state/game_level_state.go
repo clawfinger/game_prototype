@@ -3,6 +3,7 @@ package state
 import (
 	"prototype/ecs/components"
 	"prototype/ecs/systems"
+	"prototype/event"
 	gamecontext "prototype/game_context"
 	gamemap "prototype/map"
 	"prototype/screen"
@@ -13,6 +14,7 @@ type GameLevelState struct {
 	MapRenderer       *gamemap.MapRenderer
 	EntityContainer   *components.EntityContainer
 	systemsManager    *systems.SystemManager
+	EventDispatcher   *event.EventDispatcher
 	characterEntityID int64
 }
 
@@ -22,6 +24,7 @@ func NewGameLevelState() *GameLevelState {
 		Map:             gameMap,
 		MapRenderer:     gamemap.NewMapRenderer(gameMap),
 		EntityContainer: gamecontext.GameContext.EntityContainer,
+		EventDispatcher: gamecontext.GameContext.EventDispatcher,
 		systemsManager:  systems.NewSystemManager(gamecontext.GameContext.EventDispatcher, gamecontext.GameContext.EntityContainer, gamecontext.GameContext.Screen),
 	}
 }
@@ -44,7 +47,7 @@ func (s *GameLevelState) Update() {
 }
 
 func (s *GameLevelState) Render() {
-	s.MapRenderer.Render()
+	s.EventDispatcher.Dispatch(&event.RenderEvent{})
 }
 
 func (s *GameLevelState) Deinit() {}
