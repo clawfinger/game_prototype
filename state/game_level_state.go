@@ -19,7 +19,7 @@ type GameLevelState struct {
 }
 
 func NewGameLevelState() *GameLevelState {
-	gameMap := gamemap.NewMap()
+	gameMap := gamemap.NewGameMap()
 	return &GameLevelState{
 		Map:             gameMap,
 		MapRenderer:     gamemap.NewMapRenderer(gameMap),
@@ -30,8 +30,8 @@ func NewGameLevelState() *GameLevelState {
 }
 
 func (s *GameLevelState) Init() {
-	s.Map.Init()
 	s.MapRenderer.Init()
+	s.Map.GenerateMap()
 	s.systemsManager.Init()
 	s.characterEntityID = s.EntityContainer.CreateEntity([]string{components.PositionComponentName, components.SpriteComponentName})
 	sprite := components.GetComponent[*components.SpriteComponent](s.EntityContainer, s.characterEntityID, components.SpriteComponentName)

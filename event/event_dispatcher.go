@@ -1,5 +1,7 @@
 package event
 
+import "log"
+
 type EventDispatcher struct {
 	subscriptions map[string]*subscription
 }
@@ -23,5 +25,7 @@ func (d *EventDispatcher) Dispatch(e Event) {
 	sub, ok := d.subscriptions[e.Name()]
 	if ok {
 		sub.broadcast(e)
+	} else {
+		log.Printf("No subscriber for dispatched event %s", e.Name())
 	}
 }
