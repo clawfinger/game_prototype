@@ -3,6 +3,8 @@ package gamemap
 import (
 	"fmt"
 	"testing"
+
+	"github.com/hajimehoshi/ebiten/v2"
 )
 
 func TestLinear(t *testing.T) {
@@ -178,3 +180,14 @@ func TestFromLinear(t *testing.T) {
 // 		}
 // 	}
 // }
+
+func TestCoordsTranslate(t *testing.T) {
+	translate := ebiten.GeoM{}
+	translate.Reset()
+
+	translate.Translate(10, 10)
+
+	translate.Invert()
+	resX, resY := translate.Apply(5, 5)
+	t.Logf("%f:%f\n", resX, resY)
+}

@@ -14,6 +14,7 @@ type MapRenderer struct {
 	m             *GameMap
 	mapTileOp     *ebiten.GeoM
 	mapPositionOp *ebiten.GeoM
+	mapInverted   *ebiten.GeoM
 	tile          *tiles.TileManager
 	screen        *screen.Screen
 	ed            *event.EventDispatcher
@@ -24,12 +25,15 @@ type MapRenderer struct {
 func NewMapRenderer(m *GameMap) *MapRenderer {
 	mapPos := &ebiten.GeoM{}
 	mapPos.Translate(float64(settings.GameplayData.MapOffsetX), float64(settings.GameplayData.MapOffsetY))
+	inverted := *mapPos
+	inverted.Invert()
 	return &MapRenderer{
 		m:             m,
 		mapTileOp:     &ebiten.GeoM{},
 		tile:          gamecontext.GameContext.TileManager,
 		screen:        gamecontext.GameContext.Screen,
 		mapPositionOp: mapPos,
+		mapInverted:   &inverted,
 		ed:            gamecontext.GameContext.EventDispatcher,
 	}
 }
@@ -41,6 +45,7 @@ func (r *MapRenderer) Init() {
 
 func (r *MapRenderer) Render() {
 	r.screen.AddToLayer(screen.FloorLayer, r.image, r.mapPositionOp)
+	r.drawPointer()
 }
 
 func (r *MapRenderer) Notify(e event.Event) {
@@ -62,7 +67,26 @@ func createLinearFromRowAndColumn(row int, column int, sizeX int) int {
 	return row*sizeX + column
 }
 
-func (r *MapRenderer) handleMapArenaLoadedEvent(e *event.MapArenaLoadedEvent) {
+func (r *MapRenderer) drawPointer() {
+	mouseX, mouseY := ebiten.CursorPosition()
+	mapMouseX, mapMouseY := r.mapInverted.Apply(float64(mouseX), float64(mouseY))
+	if mapMouseX < 0 || mapMouseY < 0 {
+		return
+	}
+	if int(mapMouseX) > settings.Data.Tilesheet.TileSize*r.currentArena.SizeX ||
+		int(mapMouseY) > settings.Data.Tilesheet.TileSize*r.currentArena.SizeY {
+		return
+	}
+	tileX := int(mapMouseX / float64(settings.Data.Tilesheet.TileSize))
+	tileY := int(mapMouseY / float64(settings.Data.Tilesheet.TileSize))
+
+	r.mapTileOp.Reset()
+	r.mapTileOp.Translate(float64(tileX*settings.Data.Tilesheet.TileSize), float64(tileY*settings.Data.Tilesheet.TileSize))
+	r.mapTileOp.Concat(*r.mapPositionOp)
+	r.screen.AddToLayer(screen.PointerLayer, r.tile.GetTile(625), r.mapTileOp)
+}
+
+func (r *MapRenderer) handleMapArenaLoadedEvent(*event.MapArenaLoadedEvent) {
 	r.currentArena = r.m.getCurrentArena()
 
 	width := settings.Data.Tilesheet.TileSize * r.currentArena.SizeX
