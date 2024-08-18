@@ -16,6 +16,7 @@ import (
 
 func main() {
 	ebiten.SetWindowTitle("Prototype")
+	ebiten.SetVsyncEnabled(true)
 	game, err := NewGame()
 	if err != nil {
 		log.Fatal(err)
