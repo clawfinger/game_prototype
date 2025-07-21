@@ -45,7 +45,7 @@ func (r *MapRenderer) Init() {
 
 func (r *MapRenderer) Render() {
 	r.screen.AddToLayer(screen.FloorLayer, r.image, r.mapPositionOp)
-	r.drawPointer()
+	r.renderPointer()
 }
 
 func (r *MapRenderer) Notify(e event.Event) {
@@ -67,7 +67,7 @@ func createLinearFromRowAndColumn(row int, column int, sizeX int) int {
 	return row*sizeX + column
 }
 
-func (r *MapRenderer) drawPointer() {
+func (r *MapRenderer) renderPointer() {
 	mouseX, mouseY := ebiten.CursorPosition()
 	mapMouseX, mapMouseY := r.mapInverted.Apply(float64(mouseX), float64(mouseY))
 	if mapMouseX < 0 || mapMouseY < 0 {

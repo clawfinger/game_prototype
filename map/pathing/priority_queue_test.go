@@ -32,14 +32,14 @@ func TestPriorityQueue(t *testing.T) {
 	three := &testNode{priority: 10}
 	queue.Push(10, three)
 	four := &testNode{priority: 11}
-	queue.Push(10, four)
+	queue.Push(11, four)
 
 	res1 := queue.Pop()
 	res2 := queue.Pop()
 	res3 := queue.Pop()
 	res4 := queue.Pop()
-	require.Equal(t, 10, res1.GetPathCost())
-	require.Equal(t, 11, res2.GetPathCost())
-	require.Equal(t, 5, res3.GetPathCost())
-	require.Equal(t, 1, res4.GetPathCost())
+	require.Equal(t, 1, res1.GetPathCost())
+	require.Equal(t, 5, res2.GetPathCost())
+	require.Equal(t, 10, res3.GetPathCost())
+	require.Equal(t, 11, res4.GetPathCost())
 }

@@ -28,11 +28,9 @@ func Path(arena Map, fromIdx, toIdx int) ([]INode, bool) {
 		}
 
 		current := queue.Pop()
-
 		if current.GetIndex() == toIdx {
 			for {
 				if cameFrom[current.GetIndex()] == -1 {
-					path = append(path, current)
 					slices.Reverse(path)
 					return path, true
 				}

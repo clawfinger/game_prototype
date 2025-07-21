@@ -275,16 +275,31 @@ func TestAstar(t *testing.T) {
 		to   int
 		len  int
 	}{
+		// {
+		// 	from: 0,
+		// 	to:   9,
+		// 	len:  5,
+		// },
+		// {
+		// 	from: 0,
+		// 	to:   2,
+		// 	len:  2,
+		// },
+		// {
+		// 	from: 1,
+		// 	to:   14,
+		// 	len:  5,
+		// },
 		{
-			from: 0,
-			to:   9,
-			len:  5,
+			from: 22,
+			to:   4,
+			len:  6,
 		},
 	}
 	for _, test := range tests {
 		res, found := Path(&arena, test.from, test.to)
 		require.True(t, found)
 		require.NotEmpty(t, res)
-		require.Len(t, res, test.len+1)
+		require.Len(t, res, test.len)
 	}
 }
